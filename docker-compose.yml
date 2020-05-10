@@ -1,0 +1,31 @@
+version: '3'
+services:
+  dbos:
+    image: mysql:5.7
+    volumes:
+      - mysql_storage_new:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: vikash
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: mydatabase
+
+  wpos:
+    image: wordpress:5.1.1-php7.3-apache
+    volumes:
+      - wp_storage_new:/var/www/html
+    restart: always
+    depends_on:
+      - dbos
+    ports:
+      - 1010:80 
+    environment:
+      WORDPRESS_DB_HOST: dbos
+      WORDPRESS_DB_USER: vikash
+      WORDPRESS_DB_PASSWORD: admin
+      WORDPRESS_DB_NAME: mydatabase
+
+volumes:
+  wp_storage_new:
+  mysql_storage_new:
